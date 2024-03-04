@@ -404,7 +404,7 @@ class MainThread(QThread):
                         to=input()
                     )
                 print(message.sid)
-                speak('message sent..')
+                speak('message sent.')
             elif 'where are we' in self.query:
                 speak('let me check!')
                 try:
