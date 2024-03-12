@@ -191,7 +191,7 @@ def playgame(self):
 
 def get_num(self):
     dic = {"send it to swathi": 9381584759,
-           "send it to shivani": 7032890963, "send it to nikhil": 8019997494}
+           "send it to shivani": 7032890963, "send it to nikhil": 7032890963}
     speak('whom do you want to send the message ')
     inpp = self.takecommand()
     print(inpp)
@@ -213,7 +213,7 @@ class MainThread(QThread):
         r = sr.Recognizer()
         with sr.Microphone() as source:
             print('listening...')
-            r.pause_threshold = 1
+            r.pause_threshold = 1.5
             r.adjust_for_ambient_noise(source)
             audio = r.listen(source, phrase_time_limit=5)
         try:
@@ -226,14 +226,12 @@ class MainThread(QThread):
         return query
 
     def run(self):
-        #speak("please say wakeup to continue..")
         while True:
             self.query = self.takecommand()
-            # if "wake" in self.query or "wakeup" in self.query or "wake up" in self.query:
             self.pertask()
 
     def pertask(self):
-        # wishMe()
+        wishMe()
         while True:
             self.query = self.takecommand()
 
@@ -289,21 +287,16 @@ class MainThread(QThread):
                 speak('here you go')
                 webbrowser.open("https://mail.google.com/mail/u/0/#inbox")
             elif 'send a message' in self.query:
-                timef = datetime.datetime.now().strftime('%I:%M %p')
-                timee = datetime.datetime.now().strftime('%H:%M')
-                s1 = str(timee[0]) + str(timee[1])
-                s2 = str(timee[3] + timee[4])
-                if s2[0] == '0':
-                    s2 = s2[1]
-                elif 'AM' in timef and s1 == '12':
-                    s1 = '00'
+                now = datetime.datetime.now()
+                current_hour = int(now.hour)
+                current_minute = int(now.minute)
                 speak('what i have to send ')
                 mess = self.takecommand()
                 number = get_num(self)
                 if number != "none":
                     speak('message sending..')
                     kit.sendwhatmsg('+91' + str(number), mess,
-                                    int(s1), int(s2) + 2)
+                                    current_hour, current_minute + 2)
                 else:
                     pass
             elif 'send a email' in self.query:
@@ -394,13 +387,13 @@ class MainThread(QThread):
                 msg = self.takecommand()
 
                 account_sid = 'AC4a5e160677981459b0938b5769eab4ee'
-                auth_token = '4a47f90ab357d1698c22d473979ae4ad'
+                auth_token = '8fd084d096c7091a3f75fd2cc9031ae5'
                 client = Client(account_sid, auth_token)
 
                 message = client.messages \
                     .create(
                         body=msg,
-                        from_='+13105987480',
+                        from_='+18324718067',
                         to=input()
                     )
                 print(message.sid)
@@ -475,11 +468,10 @@ class MainThread(QThread):
                 str1 = self.takecommand()
                 speak(str1)
             elif "internet speed" in self.query:
-                st = speedtest.Speedtest()
-                dl = st.download()
-                ul = st.upload()
-                speak("download speed is: "+str(dl[:3]) +
-                    " upload speed is " + str(ul[:3]))
+               st = speedtest.Speedtest()
+               dl = str(st.download())
+               ul = str(st.upload())
+               speak("download speed is: " + dl[:3] + " upload speed is " + ul[:3])
             else:
                 print('\n')
 
