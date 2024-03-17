@@ -7,6 +7,7 @@ import time
 import webbrowser
 
 import cv2
+import openai
 import psutil
 import pyjokes
 import pyttsx3
@@ -17,13 +18,11 @@ import speedtest
 import wikipedia
 import winshell
 import wolframalpha
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtCore import QDate, Qt, QTime, QTimer
-from PyQt5.QtGui import *
-from PyQt5.QtGui import QMovie
 from PyQt5.QtWidgets import *
-from PyQt5.uic import loadUiType
+from openai import OpenAI
 from twilio.rest import Client
 
 from coraUI import Ui_MainWindow
@@ -48,8 +47,8 @@ def wishMe():
         speak("Good Afternoon ")
     else:
         speak("Good Evening ")
-    assname = "stark"
-    speak("I am your Assistant " + assname + " how can i help you")
+    assName = "stark"
+    speak("I am your Assistant " + assName + " how can i help you")
 
 
 def sendEmail(to, content):
@@ -88,10 +87,10 @@ def playgame(self):
     def printBoard(board):
         print("                                         " +
               board['7'] + '|' + board['8'] + '|' + board['9'])
-        print("                                         "+'-+-+-')
+        print("                                         " + '-+-+-')
         print("                                         " +
               board['4'] + '|' + board['5'] + '|' + board['6'])
-        print("                                         "+'-+-+-')
+        print("                                         " + '-+-+-')
         print("                                         " +
               board['1'] + '|' + board['2'] + '|' + board['3'])
 
@@ -183,7 +182,6 @@ def playgame(self):
         if restart == "y" or restart == "Y":
             for key in board_keys:
                 theBoard[key] = " "
-
             game()
 
     game()
@@ -205,15 +203,32 @@ def get_num(self):
         return get_num(self)
 
 
+class OpenAiGpt:
+    client = OpenAI(
+        api_key=os.environ['OPENAI_API_KEY'],
+    )
+
+    def openai_result(self, prompt: any) -> str:
+        completion = openai.chat.completions.create(
+            messages=[{'role': 'user', 'content': prompt}],
+            model="gpt-3.5-turbo-0125",
+            temperature=0,
+            max_tokens=499
+        )
+
+        return completion.choices[0].message.content
+
+
 class MainThread(QThread):
     def __init__(self):
         super(MainThread, self).__init__()
+        self.ai = OpenAiGpt()
 
     def takecommand(self):
         r = sr.Recognizer()
         with sr.Microphone() as source:
             print('listening...')
-            r.pause_threshold = 1.5
+            r.pause_threshold = 1
             r.adjust_for_ambient_noise(source)
             audio = r.listen(source, phrase_time_limit=5)
         try:
@@ -221,7 +236,7 @@ class MainThread(QThread):
             query = r.recognize_google(audio, language='en-in')
             print(f"Human: {query}")
         except Exception:
-            return "none"
+            return ""
         query = query.lower()
         return query
 
@@ -260,8 +275,6 @@ class MainThread(QThread):
                 speak('it depends on how you look')
             elif 'hello' in self.query or 'hey' in self.query:
                 speak("hello there how are you!")
-            elif 'stark' in self.query:
-                speak("how can i help you..")
             elif 'who made you' in self.query or 'who invented you' in self.query:
                 speak("I have been created by team stark.")
             elif 'who are you' in self.query:
@@ -335,8 +348,8 @@ class MainThread(QThread):
                 note = self.takecommand()
                 file = open('jarvis', 'w')
                 speak("Should i include date and time")
-                snfm = self.takecommand()
-                if 'yes' in snfm or 'sure' in snfm:
+                info = self.takecommand()
+                if 'yes' in info or 'sure' in info:
                     timee = datetime.datetime.now().strftime('%I:%M %p')
                     file.write(timee)
                     file.write(" :- ")
@@ -390,19 +403,18 @@ class MainThread(QThread):
                 auth_token = '8fd084d096c7091a3f75fd2cc9031ae5'
                 client = Client(account_sid, auth_token)
 
-                message = client.messages \
-                    .create(
-                        body=msg,
-                        from_='+18324718067',
-                        to=input()
-                    )
+                message = client.messages.create(
+                    body=msg,
+                    from_='+18324718067',
+                    to=input("Mobile No:- ")
+                )
                 print(message.sid)
                 speak('message sent.')
             elif 'where are we' in self.query:
                 speak('let me check!')
                 try:
-                    ipadd = requests.get('https://api.ipify.org').text
-                    url = 'https://get.geojs.io/v1/ip/geo/' + ipadd + '.json'
+                    ipAdd = requests.get('https://api.ipify.org').text
+                    url = 'https://get.geojs.io/v1/ip/geo/' + ipAdd + '.json'
                     geo_requests = requests.get(url)
                     geo_data = geo_requests.json()
                     city = geo_data['city']
@@ -427,9 +439,9 @@ class MainThread(QThread):
                     temperature = weather["temp"]
                     temperature = temperature - 273.15
                     humidity = weather["humidity"]
-                    weather_response = " The temperature in Celcius is " + \
-                        str(math.ceil(temperature)) + \
-                        " The humidity is " + str(humidity)
+                    weather_response = " The temperature in Celsius is " + \
+                                       str(math.ceil(temperature)) + \
+                                       " The humidity is " + str(humidity)
                     speak(weather_response)
                 else:
                     speak("City Not Found")
@@ -442,38 +454,53 @@ class MainThread(QThread):
             elif "laptop percentage" in self.query:
                 battery = psutil.sensors_battery()
                 per = battery.percent
-                speak(str(per)+" percent")
+                speak(str(per) + " percent")
             elif "join zoom meeting" in self.query:
-                py="https://us04web.zoom.us/j/7687039381?pwd=OHpmdk1Nc1hydHRzU3RwWUdaQ3NJUT09"
+                py = "https://us04web.zoom.us/j/7687039381?pwd=OHpmdk1Nc1hydHRzU3RwWUdaQ3NJUT09"
                 psec = datetime.datetime.now().strftime('%H:%M')
                 s1 = str(psec[0]) + str(psec[1])
                 s2 = str(psec[3] + psec[4])
                 print(s1)
                 print(s2)
-                tm=input("enter time(hh:mm) : ")
-                ss1=str(tm[0])+str(tm[1])
-                ss2=str(tm[3])+str(tm[4])
-                wh=int(ss1)-int(s1)
-                wm=int(ss2)-int(s2)
-                hrr=0
-                min=0
-                if wh>0:
-                    hrr=int(wh)*3600
-                if wm>0:
-                    min=int(wm)*60
-                time.sleep(hrr+min)
+                tm = input("enter time(hh:mm) : ")
+                ss1 = str(tm[0]) + str(tm[1])
+                ss2 = str(tm[3]) + str(tm[4])
+                wh = int(ss1) - int(s1)
+                wm = int(ss2) - int(s2)
+                hrr = 0
+                min = 0
+                if wh > 0:
+                    hrr = int(wh) * 3600
+                if wm > 0:
+                    min = int(wm) * 60
+                time.sleep(hrr + min)
                 webbrowser.open(py)
             elif "repeat me" in self.query:
                 speak("what i have to repeat")
                 str1 = self.takecommand()
                 speak(str1)
             elif "internet speed" in self.query:
-               st = speedtest.Speedtest()
-               dl = str(st.download())
-               ul = str(st.upload())
-               speak("download speed is: " + dl[:3] + " upload speed is " + ul[:3])
-            else:
-                print('\n')
+                st = speedtest.Speedtest()
+                dl = str(st.download())
+                ul = str(st.upload())
+                speak("download speed is: " + dl[:3] + " upload speed is " + ul[:3])
+            elif "activate GPT".lower() in self.query.lower():
+                speak("AI activated! please proceed with command.")
+                while True:
+                    usercommand = self.takecommand().strip()
+                    print('usercommand : ' + usercommand)
+                    if usercommand.__eq__('') or len(usercommand) == 0:
+                        print('empty!')
+                        continue
+                    elif usercommand.__contains__('stop') or usercommand.__contains__(
+                            'quit') or usercommand.__contains__(
+                        'terminate'):
+                        speak('Stark GPT deactivated!')
+                        break
+                    else:
+                        print('command processing...')
+                        command = OpenAiGpt().openai_result(usercommand)
+                        speak(command)
 
 
 startExecution = MainThread()
@@ -484,24 +511,28 @@ class Main(QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.pushButton.clicked.connect(self.startTask)
+        self.ui.pushButton.clicked.connect(self.starttask)
         self.ui.pushButton_2.clicked.connect(self.close)
 
-    def startTask(self):
+    def starttask(self):
         self.ui.movie = QtGui.QMovie(
-            "7LP8.gif")
+            "listening_ball.gif")
         self.ui.label.setMovie(self.ui.movie)
         self.ui.movie.start()
         self.ui.movie = QtGui.QMovie(
-            "Jarvis_Loading_Screen.gif")
+            "wave.gif")
         self.ui.label_2.setMovie(self.ui.movie)
         self.ui.movie.start()
+        self.ui.movie = QtGui.QMovie(
+            "Jarvis_Loading_Screen.gif")
+        self.ui.label_3.setMovie(self.ui.movie)
+        self.ui.movie.start()
         timer = QTimer(self)
-        timer.timeout.connect(self.showTime)
+        timer.timeout.connect(self.showtime)
         timer.start(1000)
         startExecution.start()
 
-    def showTime(self):
+    def showtime(self):
         current_time = QTime.currentTime()
         current_date = QDate.currentDate()
         label_time = current_time.toString('hh:mm:ss')

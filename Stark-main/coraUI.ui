@@ -6,51 +6,43 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1230</width>
-    <height>887</height>
+    <width>1263</width>
+    <height>920</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(16, 19, 34);
+background-color: rgb(2, 1, 17);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>-150</x>
-      <y>0</y>
-      <width>1381</width>
-      <height>891</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>ArrowCursor</cursorShape>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 9pt &quot;MS Shell Dlg 2&quot;;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>7LP8.gif</pixmap>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>610</y>
-      <width>93</width>
-      <height>41</height>
+      <x>70</x>
+      <y>810</y>
+      <width>131</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 11pt &quot;MS Shell Dlg 2&quot;;
-font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
+     <string notr="true">            border: none;
+background-color: rgb(103, 147, 200);
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px;
+font: 150 15pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="text">
      <string>RUN</string>
@@ -59,17 +51,31 @@ font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>610</y>
-      <width>93</width>
-      <height>41</height>
+      <x>1080</x>
+      <y>810</y>
+      <width>121</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
+    </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 12pt &quot;MS Shell Dlg 2&quot;;</string>
+     <string notr="true">            border: none;
+background-color: rgb(103, 147, 200);
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px;
+font: 150 15pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
     <property name="text">
      <string>EXIT</string>
@@ -106,10 +112,26 @@ border-radius:none;</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>30</y>
-      <width>411</width>
-      <height>121</height>
+      <x>270</x>
+      <y>820</y>
+      <width>741</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../../Downloads/wave.gif</pixmap>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>391</width>
+      <height>111</height>
      </rect>
     </property>
     <property name="text">
@@ -119,6 +141,35 @@ border-radius:none;</string>
      <pixmap>Jarvis_Loading_Screen.gif</pixmap>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>570</y>
+      <width>261</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>261</width>
+      <height>261</height>
+     </size>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>listening_ball.gif</pixmap>
+    </property>
+   </widget>
+   <zorder>label_2</zorder>
+   <zorder>textBrowser</zorder>
+   <zorder>textBrowser_2</zorder>
+   <zorder>pushButton_2</zorder>
+   <zorder>label_3</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>label</zorder>
   </widget>
  </widget>
  <resources/>
