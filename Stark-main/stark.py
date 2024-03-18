@@ -35,7 +35,7 @@ engine.setProperty('voice', voices[1].id)
 
 def speak(audio):
     engine.say(audio)
-    print(f"stark : {audio}")
+    stark.terminalprint(f"stark : {audio}")
     engine.runAndWait()
 
 
@@ -85,14 +85,14 @@ def playgame(self):
         board_keys.append(key)
 
     def printBoard(board):
-        print("                                         " +
-              board['7'] + '|' + board['8'] + '|' + board['9'])
-        print("                                         " + '-+-+-')
-        print("                                         " +
-              board['4'] + '|' + board['5'] + '|' + board['6'])
-        print("                                         " + '-+-+-')
-        print("                                         " +
-              board['1'] + '|' + board['2'] + '|' + board['3'])
+        stark.terminalprint("                                         " +
+                            board['7'] + '|' + board['8'] + '|' + board['9'])
+        stark.terminalprint("                                         " + '-+-+-')
+        stark.terminalprint("                                         " +
+                            board['4'] + '|' + board['5'] + '|' + board['6'])
+        stark.terminalprint("                                         " + '-+-+-')
+        stark.terminalprint("                                         " +
+                            board['1'] + '|' + board['2'] + '|' + board['3'])
 
     def game():
 
@@ -101,7 +101,7 @@ def playgame(self):
 
         for i in range(10):
             printBoard(theBoard)
-            print("It's your turn," + turn + " Move to which place?")
+            stark.terminalprint("It's your turn," + turn + " Move to which place?")
             speak("It's your turn " + turn + " Move to which place?")
 
             move = input()
@@ -110,73 +110,73 @@ def playgame(self):
                     theBoard[move] = turn
                     count += 1
                 else:
-                    print("That place is already filled.")
+                    stark.terminalprint("That place is already filled.")
                     speak("That place is already filled.")
                     continue
 
                 if count >= 5:
                     if theBoard['7'] == theBoard['8'] == theBoard['9'] != ' ':  # across the top
                         printBoard(theBoard)
-                        print("\nGame Over.\n")
-                        print(" **** " + turn + " won. ****")
+                        stark.terminalprint("\nGame Over.\n")
+                        stark.terminalprint(" **** " + turn + " won. ****")
                         speak(turn + " won.")
                         break
                     # across the middle
                     elif theBoard['4'] == theBoard['5'] == theBoard['6'] != ' ':
                         printBoard(theBoard)
-                        print("\nGame Over.\n")
-                        print(" **** " + turn + " won. ****")
+                        stark.terminalprint("\nGame Over.\n")
+                        stark.terminalprint(" **** " + turn + " won. ****")
                         speak(turn + " won.")
                         break
                     # across the bottom
                     elif theBoard['1'] == theBoard['2'] == theBoard['3'] != ' ':
                         printBoard(theBoard)
-                        print("\nGame Over.\n")
-                        print(" **** " + turn + " won. ****")
+                        stark.terminalprint("\nGame Over.\n")
+                        stark.terminalprint(" **** " + turn + " won. ****")
                         speak(turn + " won.")
                         break
                     # down the left side
                     elif theBoard['1'] == theBoard['4'] == theBoard['7'] != ' ':
                         printBoard(theBoard)
-                        print("\nGame Over.\n")
-                        print(" **** " + turn + " won. ****")
+                        stark.terminalprint("\nGame Over.\n")
+                        stark.terminalprint(" **** " + turn + " won. ****")
                         speak(turn + " won.")
                         break
                     elif theBoard['2'] == theBoard['5'] == theBoard['8'] != ' ':  # down the middle
                         printBoard(theBoard)
-                        print("\nGame Over.\n")
-                        print(" **** " + turn + " won. ****")
+                        stark.terminalprint("\nGame Over.\n")
+                        stark.terminalprint(" **** " + turn + " won. ****")
                         speak(turn + " won.")
                         break
                     # down the right side
                     elif theBoard['3'] == theBoard['6'] == theBoard['9'] != ' ':
                         printBoard(theBoard)
-                        print("\nGame Over.\n")
-                        print(" **** " + turn + " won. ****")
+                        stark.terminalprint("\nGame Over.\n")
+                        stark.terminalprint(" **** " + turn + " won. ****")
                         speak(turn + " won.")
                         break
                     elif theBoard['7'] == theBoard['5'] == theBoard['3'] != ' ':  # diagonal
                         printBoard(theBoard)
-                        print("\nGame Over.\n")
-                        print(" **** " + turn + " won. ****")
+                        stark.terminalprint("\nGame Over.\n")
+                        stark.terminalprint(" **** " + turn + " won. ****")
                         speak(turn + " won.")
                         break
                     elif theBoard['1'] == theBoard['5'] == theBoard['9'] != ' ':  # diagonal
                         printBoard(theBoard)
-                        print("\nGame Over.\n")
-                        print(" **** " + turn + " won. ****")
+                        stark.terminalprint("\nGame Over.\n")
+                        stark.terminalprint(" **** " + turn + " won. ****")
                         speak(turn + " won.")
                         break
 
                 if count == 9:
-                    print("\nGame Over.\n")
-                    print("It's a Tie!!")
+                    stark.terminalprint("\nGame Over.\n")
+                    stark.terminalprint("It's a Tie!!")
                 if turn == 'X':
                     turn = 'O'
                 else:
                     turn = 'X'
             else:
-                print("please enter a valid number")
+                stark.terminalprint("please enter a valid number")
                 speak("please enter a valid number")
         restart = input("Do want to play Again?(y/n)")
         if restart == "y" or restart == "Y":
@@ -192,7 +192,7 @@ def get_num(self):
            "send it to shivani": 7032890963, "send it to nikhil": 7032890963}
     speak('whom do you want to send the message ')
     inpp = self.takecommand()
-    print(inpp)
+    stark.terminalprint(inpp)
     if inpp in dic.keys():
         a = dic[inpp]
         return a
@@ -227,14 +227,14 @@ class MainThread(QThread):
     def takecommand(self):
         r = sr.Recognizer()
         with sr.Microphone() as source:
-            print('listening...')
+            stark.terminalprint('listening...')
             r.pause_threshold = 1
             r.adjust_for_ambient_noise(source)
             audio = r.listen(source, phrase_time_limit=5)
         try:
-            print('Recognizing...')
+            stark.terminalprint('Recognizing...')
             query = r.recognize_google(audio, language='en-in')
-            print(f"Human: {query}")
+            stark.terminalprint(f"Human: {query}")
         except Exception:
             return ""
         query = query.lower()
@@ -267,14 +267,12 @@ class MainThread(QThread):
             elif 'play' in self.query:
                 song = self.query.replace('play', '')
                 speak('playing' + song)
-                print(song)
+                stark.terminalprint(song)
                 kit.playonyt(song)
             elif 'good job' in self.query:
                 speak('thank you! it is my responsibility')
             elif 'how old are you' in self.query:
                 speak('it depends on how you look')
-            elif 'hello' in self.query or 'hey' in self.query:
-                speak("hello there how are you!")
             elif 'who made you' in self.query or 'who invented you' in self.query:
                 speak("I have been created by team stark.")
             elif 'who are you' in self.query:
@@ -321,7 +319,7 @@ class MainThread(QThread):
                     speak("Email has been sent !")
                 except Exception as e:
 
-                    print(e)
+                    stark.terminalprint(e)
                     speak("I am not able to send this email")
             elif "calculate" in self.query:
                 app_id = "E4AJ9J-WGXTR9AGEX"
@@ -362,7 +360,7 @@ class MainThread(QThread):
                 speak("Showing Notes")
                 file = open("jarvis", "r")
                 s = file.read()
-                print(s)
+                stark.terminalprint(s)
                 speak(s)
             elif "restart" in self.query:
                 subprocess.call(["shutdown", "/r"])
@@ -408,7 +406,7 @@ class MainThread(QThread):
                     from_='+18324718067',
                     to=input("Mobile No:- ")
                 )
-                print(message.sid)
+                stark.terminalprint(message.sid)
                 speak('message sent.')
             elif 'where are we' in self.query:
                 speak('let me check!')
@@ -460,8 +458,8 @@ class MainThread(QThread):
                 psec = datetime.datetime.now().strftime('%H:%M')
                 s1 = str(psec[0]) + str(psec[1])
                 s2 = str(psec[3] + psec[4])
-                print(s1)
-                print(s2)
+                stark.terminalprint(s1)
+                stark.terminalprint(s2)
                 tm = input("enter time(hh:mm) : ")
                 ss1 = str(tm[0]) + str(tm[1])
                 ss2 = str(tm[3]) + str(tm[4])
@@ -488,9 +486,9 @@ class MainThread(QThread):
                 speak("AI activated! please proceed with command.")
                 while True:
                     usercommand = self.takecommand().strip()
-                    print('usercommand : ' + usercommand)
+                    stark.terminalprint('usercommand : ' + usercommand)
                     if usercommand.__eq__('') or len(usercommand) == 0:
-                        print('empty!')
+                        stark.terminalprint('empty!')
                         continue
                     elif usercommand.__contains__('stop') or usercommand.__contains__(
                             'quit') or usercommand.__contains__(
@@ -498,7 +496,7 @@ class MainThread(QThread):
                         speak('Stark GPT deactivated!')
                         break
                     else:
-                        print('command processing...')
+                        stark.terminalprint('command processing...')
                         command = OpenAiGpt().openai_result(usercommand)
                         speak(command)
 
@@ -539,6 +537,9 @@ class Main(QMainWindow):
         label_date = current_date.toString(Qt.ISODate)
         self.ui.textBrowser.setText(label_date)
         self.ui.textBrowser_2.setText(label_time)
+
+    def terminalprint(self, text):
+        self.ui.plainTextEdit.appendPlainText(text)
 
 
 app = QApplication(sys.argv)

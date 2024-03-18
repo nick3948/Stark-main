@@ -144,23 +144,49 @@ border-radius:none;</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>570</y>
-      <width>261</width>
-      <height>261</height>
+      <x>590</x>
+      <y>670</y>
+      <width>211</width>
+      <height>161</height>
      </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>261</width>
-      <height>261</height>
-     </size>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>listening_ball.gif</pixmap>
+     <pixmap>../../../Downloads/listening_ball.gif</pixmap>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>180</y>
+      <width>1071</width>
+      <height>461</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 255);
+font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+    <property name="plainText">
+     <string/>
+    </property>
+    <property name="backgroundVisible">
+     <bool>false</bool>
+    </property>
+    <property name="centerOnScroll">
+     <bool>false</bool>
+    </property>
+    <property name="placeholderText">
+     <string/>
     </property>
    </widget>
    <zorder>label_2</zorder>
@@ -170,6 +196,7 @@ border-radius:none;</string>
    <zorder>label_3</zorder>
    <zorder>pushButton</zorder>
    <zorder>label</zorder>
+   <zorder>plainTextEdit</zorder>
   </widget>
  </widget>
  <resources/>
