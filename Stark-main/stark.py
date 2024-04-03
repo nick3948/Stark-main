@@ -5,6 +5,8 @@ import subprocess
 import sys
 import time
 import webbrowser
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 import cv2
 import openai
@@ -51,13 +53,35 @@ def wishMe():
     speak("I am your Assistant " + assName + " how can i help you")
 
 
-def sendEmail(to, content):
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.ehlo()
-    server.starttls()
-    server.login('nikhilgattu9@gmail.com', '#Nikhilkumar2000')
-    server.sendmail('nikhilgattu9@gmail.com', to, content)
-    server.close()
+def sendEmail(recipient_email, content):
+    print(recipient_email + "------------------" + content)
+    # mailServer=smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    sender_email = 'starkyou2024@gmail.com'
+    app_password = 'advc shoh ynvj aekj'
+    # toAddr='nikhilgattu9@gmail.com'
+    # text= "This is a test of sending email from within Python."
+    try:
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+
+        # Login using the application-specific password
+        # app_password = 'your_application_specific_password'
+        server.login(sender_email, app_password)
+
+        # Create email message
+        message = MIMEMultipart()
+        message['From'] = sender_email
+        message['To'] = recipient_email
+        message['Subject'] = "There's an email from stark!!!"
+        message.attach(MIMEText(content, 'plain'))
+
+        # Send the email
+        server.sendmail(sender_email, recipient_email, message.as_string())
+        print("Email sent successfully!")
+
+        # Close the SMTP session
+        server.quit()
+    except Exception as e:
+        print("Failed to send email:", e)
 
 
 def news():
@@ -234,7 +258,7 @@ class MainThread(QThread):
         try:
             stark.terminalprint('Recognizing...')
             query = r.recognize_google(audio, language='en-in')
-            stark.terminalprint(f"Human: {query}")
+            print(f"Human: {query}")
         except Exception:
             return ""
         query = query.lower()
@@ -318,7 +342,6 @@ class MainThread(QThread):
                     sendEmail(to, content)
                     speak("Email has been sent !")
                 except Exception as e:
-
                     stark.terminalprint(e)
                     speak("I am not able to send this email")
             elif "calculate" in self.query:
